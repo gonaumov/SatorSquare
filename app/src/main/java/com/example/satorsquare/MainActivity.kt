@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val scope = CoroutineScope(Job() + Dispatchers.Main)
-    private var job = initTimeout()
+    private var job = initTimeoutAsync()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initTimeout(): Deferred<Unit> {
+    private fun initTimeoutAsync(): Deferred<Unit> {
         return scope.async(start = CoroutineStart.LAZY) {
             while (isActive) {
                 updateSquare()
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleAutoUpdate() {
         if (job.isActive) {
             job.cancel()
-            job = initTimeout()
+            job = initTimeoutAsync()
             binding.buttonStart.text = resources.getText(R.string.button_start)
         } else {
             job.start()
